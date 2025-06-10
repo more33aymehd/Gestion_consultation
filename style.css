@@ -3,14 +3,45 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(40, 141, 224);
+    padding: 10px 20px;
+    color: white;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: black; /* Changement de couleur au survol */
 }
 
 /* Div verte originale */
 .demi-page {
     height: 70vh;
     width: 100%;
-    background-color: #90ee90;
+    background-color: rgb(40, 141, 224);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,25 +50,28 @@ body, html {
 }
 
 .demi-page h1 {
-    color: #2d3748;
-    font-size: 2.5rem;
+    color: white;
+    font-size: 2rem;
     margin-bottom: 40px;
+    transform: translate(0, 150px);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 /* Conteneur des sections */
 .sections-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 85px;
     width: 90%;
     flex-wrap: wrap;
+    transform: translate(0, 250px);
 }
 
 /* Cartes de service */
 .service-card {
     width: 250px;
     height: 120px;
-    background-color: white;
+    background-color: rgb(113, 187, 230);
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 3px 5px rgba(0,0,0,0.1);
@@ -63,9 +97,10 @@ body, html {
 
 .card-content span {
     font-size: 1rem;
-    color: #333;
+    color: black;
     font-weight: 600;
     margin-bottom: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .card-content button {
@@ -84,10 +119,102 @@ body, html {
     background-color: #3cb371;
 }
 
+/* Section d'information */
+.info-section {
+    display: flex;
+    align-items: center;
+    padding: 40px; /* Augmenter l'espacement */
+}
+
+.consult-image {
+    width: 470px; /* Augmenter la taille de l'image */
+    height: auto; /* Garde les proportions */
+    margin-right: 40px; /* Espace entre l'image et le texte */
+}
+
+.description {
+    max-width: 700px; /* Augmenter la largeur maximale du texte */
+    font-size: 20px;
+}
+
+.consultaion-descrip {
+    color: #2e8b57;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.description a {
+    text-decoration: none;
+}
+
+/* Deuxième section d'information */
+.second-info-section {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2); /* Couleur de fond blanche plus sombre */
+    padding: 40px;
+    margin-bottom: 20px; /* Réduire l'espacement entre les sections */
+}
+
+.group-image {
+    width: 470px; /* Ajustez la taille de l'image */
+    height: auto; /* Garde les proportions */
+    margin-left: 40px; /* Espace entre l'image et le texte */
+}
+
+.second-info-section .description {
+    max-width: 700px; /* Limite la largeur du texte */
+}
+
+.rejoindre_groupe {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.second-info-section a {
+    text-decoration: none;
+    color: #2e8b57;
+}
+
+/* Troisième section d'information */
+.third-info-section {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2); /* Couleur de fond blanche plus sombre */
+    padding: 40px;
+}
+
+.alert-image {
+    width: 470px; /* Ajustez la taille de l'image */
+    height: auto; /* Garde les proportions */
+    margin-right: 40px; /* Espace entre l'image et le texte */
+}
+
+.third-info-section .description {
+    max-width: 700px; /* Limite la largeur du texte */
+}
+
+.third-info-section .alert {
+    color: #2e8b57;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .sections-container {
         flex-direction: column;
         align-items: center;
+    }
+
+    .info-section, .second-info-section, .third-info-section {
+        flex-direction: column; /* Aligne l'image et le texte verticalement sur mobile */
+        align-items: center;
+    }
+
+    .consult-image, .group-image, .alert-image {
+        margin: 0 0 20px 0; /* Marge en bas pour l'espacement */
     }
 }
