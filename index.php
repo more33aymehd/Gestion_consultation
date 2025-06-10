@@ -12,7 +12,7 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo">MonLogo</div>
+        <div class="logo">ON A PAS ENCORE EU DE NOM POUR LE SITE😐</div>
         <nav class="nav-links">
             <a href="#" class="nav-link">Inscription</a>
             <a href="#" class="nav-link">Connexion</a>
