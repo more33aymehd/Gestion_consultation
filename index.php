@@ -51,7 +51,7 @@
     </div>
 
    <div class="info-section">
-        <img src="images/consul_1.jpg" alt="Consultation" class="consult-image">
+        <img src="images/background-1.jpeg" alt="Consultation" class="consult-image">
         <div class="description">
             <h2>À propos de notre service</h2>
             <p>Nous offrons une plateforme complète pour gérer votre santé. Prenez rendez-vous avec des professionnels, rejoignez des groupes de soutien, et accédez à toutes les ressources nécessaires pour une gestion efficace de votre bien-être.</p>
@@ -80,7 +80,7 @@
     <!-- Carousel après le 3ème div -->
     <div class="carousel-container">
         <div class="carousel">
-            <img src="images/consul_1.jpg" alt="Image 1">
+            <img src="images/background-1.jpeg" alt="Image 1">
             <img src="images/groupe_consul_1.jpg" alt="Image 2">
             <img src="images/alerte_1.jpg" alt="Image 3">
         </div>
