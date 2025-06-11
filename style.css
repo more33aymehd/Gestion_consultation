@@ -51,11 +51,10 @@ body, html {
     background-color: rgba(255,255,255,0.2);
 }
 
-/* Section principale */
+/* Section principale avec image de fond */
 .demi-page {
     height: 100vh;
     width: 100%;
-    background: linear-gradient(135deg, rgb(40, 141, 224) 0%, #2a80b9 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,14 +66,37 @@ body, html {
     overflow: hidden;
 }
 
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/groupe_consul_1.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.hero-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .demi-page h1 {
     color: white;
     font-size: 2.5rem;
     margin: 0 auto 60px;
     max-width: 800px;
     line-height: 1.3;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
     font-weight: 700;
+    position: relative;
 }
 
 /* Conteneur des sections */

@@ -20,19 +20,18 @@
     </header>
 
     <div class="demi-page">
+        <div class="hero-image"></div>
         <h1>Votre santé, notre priorité : une gestion simplifiée pour un suivi efficace.</h1>
         
         <div class="sections-container">
-            <!-- Section 1 -->
             <div class="service-card">
                 <i class="fas fa-user-md card-icon"></i>
                 <div class="card-content">
                     <span>Consulter un médecin</span>
-                    <button>Prendre RDV</button>
+                    <button>Consultation</button>
                 </div>
             </div>
 
-            <!-- Section 2 -->
             <div class="service-card">
                 <i class="fas fa-users card-icon"></i>
                 <div class="card-content">
@@ -41,7 +40,6 @@
                 </div>
             </div>
 
-            <!-- Section 3 -->
             <div class="service-card">
                 <i class="fas fa-exclamation-triangle card-icon"></i>
                 <div class="card-content">
@@ -52,7 +50,7 @@
         </div>
     </div>
 
-    <div class="info-section">
+   <div class="info-section">
         <img src="images/consul_1.jpg" alt="Consultation" class="consult-image">
         <div class="description">
             <h2>À propos de notre service</h2>
@@ -140,143 +138,6 @@
     </div>
 </footer>
 
-    <script>
-        // Animation au défilement
-        document.addEventListener('DOMContentLoaded', function() {
-            const scrollElements = document.querySelectorAll('.scroll-animate');
-            
-            const elementInView = (el) => {
-                const elementTop = el.getBoundingClientRect().top;
-                return (
-                    elementTop <= (window.innerHeight || document.documentElement.clientHeight) * 0.75
-                );
-            };
-            
-            const displayScrollElement = (element) => {
-                element.classList.add('animated');
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0)';
-            };
-            
-            const handleScrollAnimation = () => {
-                scrollElements.forEach((el) => {
-                    if (elementInView(el)) {
-                        displayScrollElement(el);
-                    }
-                });
-            };
-            
-            // Initial check
-            handleScrollAnimation();
-            
-            // Listen for scroll events
-            window.addEventListener('scroll', () => {
-                handleScrollAnimation();
-            });
-
-            // Effet de flottement pour les images
-            const floatingImages = document.querySelectorAll('.floating-effect');
-            floatingImages.forEach(img => {
-                img.style.animation = `floating 3s ease-in-out infinite`;
-            });
-
-            // Carousel
-            const carousel = document.querySelector('.carousel');
-            const images = document.querySelectorAll('.carousel img');
-            const prevBtn = document.querySelector('.prev');
-            const nextBtn = document.querySelector('.next');
-            const indicators = document.querySelectorAll('.indicator');
-            
-            let currentIndex = 0;
-            const totalImages = images.length;
-            let intervalId;
-            
-            function moveToIndex(index) {
-                if (index < 0) index = totalImages - 1;
-                if (index >= totalImages) index = 0;
-                
-                currentIndex = index;
-                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-                
-                indicators.forEach((indicator, i) => {
-                    indicator.classList.toggle('active', i === currentIndex);
-                });
-            }
-            
-            function nextImage() {
-                moveToIndex(currentIndex + 1);
-            }
-            
-            function startAutoSlide() {
-                intervalId = setInterval(nextImage, 5000); // 5 secondes
-            }
-            
-            startAutoSlide();
-            
-            prevBtn.addEventListener('click', function() {
-                clearInterval(intervalId);
-                moveToIndex(currentIndex - 1);
-                startAutoSlide();
-            });
-            
-            nextBtn.addEventListener('click', function() {
-                clearInterval(intervalId);
-                moveToIndex(currentIndex + 1);
-                startAutoSlide();
-            });
-            
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', function() {
-                    clearInterval(intervalId);
-                    moveToIndex(index);
-                    startAutoSlide();
-                });
-            });
-            
-            carousel.addEventListener('mouseenter', function() {
-                clearInterval(intervalId);
-            });
-            
-            carousel.addEventListener('mouseleave', function() {
-                startAutoSlide();
-            });
-
-            // Effet de zoom sur les images du carousel
-            const carouselImages = document.querySelectorAll('.zoom-effect');
-            carouselImages.forEach(img => {
-                img.addEventListener('mouseenter', () => {
-                    img.style.transform = 'scale(1.05)';
-                    img.style.transition = 'transform 0.5s ease';
-                });
-                img.addEventListener('mouseleave', () => {
-                    img.style.transform = 'scale(1)';
-                });
-            });
-
-            // Effet sur les boutons
-            const buttons = document.querySelectorAll('.btn-hover-effect');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', () => {
-                    button.style.transform = 'translateY(-3px)';
-                    button.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-                });
-                button.addEventListener('mouseleave', () => {
-                    button.style.transform = 'translateY(0)';
-                    button.style.boxShadow = 'none';
-                });
-            });
-
-            // Effet sur les liens
-            const links = document.querySelectorAll('.link-hover-effect');
-            links.forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    link.style.transform = 'translateX(5px)';
-                });
-                link.addEventListener('mouseleave', () => {
-                    link.style.transform = 'translateX(0)';
-                });
-            });
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
