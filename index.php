@@ -139,5 +139,27 @@
 </footer>
 
     <script src="main.js"></script>
+    <!-- Chatbot IA -->
+<div class="chatbot-container">
+    <div class="chatbot-icon" id="chatbotToggle">
+        <i class="fas fa-robot"></i>
+    </div>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <h3>Assistante Santé IA</h3>
+            <span class="close-chat"><i class="fas fa-times"></i></span>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot-message">
+                <p>Bonjour ! Je suis votre assistante santé. Comment puis-je vous aider aujourd'hui ?</p>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="userMessage" placeholder="Tapez votre message...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

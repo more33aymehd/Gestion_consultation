@@ -58,3 +58,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Autres animations...
 });
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotWindow = document.getElementById('chatbotWindow');
+    const closeChat = document.querySelector('.close-chat');
+    const sendMessageBtn = document.getElementById('sendMessage');
+    const userMessageInput = document.getElementById('userMessage');
+    const chatbotMessages = document.getElementById('chatbotMessages');
+    
+    // Ouvrir/fermer le chat
+    chatbotToggle.addEventListener('click', function() {
+        chatbotWindow.classList.toggle('active');
+    });
+    
+    closeChat.addEventListener('click', function() {
+        chatbotWindow.classList.remove('active');
+    });
+    
+    // Envoyer un message
+    function sendMessage() {
+        const message = userMessageInput.value.trim();
+        if (message === '') return;
+        
+        // Ajouter le message de l'utilisateur
+        addMessage(message, 'user');
+        userMessageInput.value = '';
+        
+        // Réponse de l'IA (simulée)
+        setTimeout(() => {
+            const responses = [
+                "Je comprends votre préoccupation. Pouvez-vous me donner plus de détails ?",
+                "Je vais vous aider avec cela. Un instant...",
+                "C'est une question intéressante. Voici ce que je peux vous dire...",
+                "Pour cette question, je vous recommande de consulter un spécialiste."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addMessage(randomResponse, 'bot');
+        }, 1000);
+    }
+    
+    // Appuyer sur Entrée pour envoyer
+    userMessageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+    
+    sendMessageBtn.addEventListener('click', sendMessage);
+    
+    // Ajouter un message au chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', `${sender}-message`);
+        messageDiv.innerHTML = `<p>${text}</p>`;
+        chatbotMessages.appendChild(messageDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+});
