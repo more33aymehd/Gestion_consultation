@@ -173,12 +173,25 @@
             border-radius: 2rem;
             padding: 0.3rem;
         }
+        .head{
+            display: inline-block;
+        }
+        .search{
+            padding: 0.4rem;
+            border-radius: 1rem;
+            border: 1px solid white;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    + Allo Doc
+    <div class="head">
+        + Allo Doc
+    </div>
+    <div class="search-bar">
+        <input type="text" id="input-recherche" placeholder="Recherche..." oninput="filtrerTous()" class="search">
+    </div>
 </header>
 
 <div class="container">
@@ -362,6 +375,12 @@
         <div id="section-consultations" style="display: none;">
             <h2>Consultations</h2>
             <div id="liste-consultations" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Résultats de recherche -->
+        <div id="section-recherche" style="display: none;">
+            <h2>Résultats de la recherche</h2>
+            <div id="resultats-recherche"></div>
         </div>
 
     </div>
@@ -744,6 +763,35 @@
                         container.appendChild(div);
                     });
                 });
+        }
+
+        function filtrerTous() {
+            const val = document.getElementById("input-recherche").value.toLowerCase();
+
+            // 🔍 Médecins
+            document.querySelectorAll("#table-medecins tbody tr").forEach(tr => {
+                tr.style.display = tr.textContent.toLowerCase().includes(val) ? "" : "none";
+            });
+
+            // 🔍 Hôpitaux
+            document.querySelectorAll("#table-hopitaux tbody tr").forEach(tr => {
+                tr.style.display = tr.textContent.toLowerCase().includes(val) ? "" : "none";
+            });
+
+            // 🔍 Pharmacies
+            document.querySelectorAll("#table-pharmacies tbody tr").forEach(tr => {
+                tr.style.display = tr.textContent.toLowerCase().includes(val) ? "" : "none";
+            });
+
+            // 🔍 Patients (cards)
+            document.querySelectorAll("#liste-patients .patient-card").forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(val) ? "" : "none";
+            });
+
+            // 🔍 Consultations
+            document.querySelectorAll("#liste-consultations .consultation-box").forEach(box => {
+                box.style.display = box.textContent.toLowerCase().includes(val) ? "" : "none";
+            });
         }
 
 </script>
