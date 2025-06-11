@@ -369,15 +369,33 @@
 
 <script>
     function afficherSection(section) {
-        document.getElementById('section-medecins').style.display = 'none';
-        document.getElementById('section-hopitaux').style.display = 'none';
-        document.getElementById('section-pharmacies').style.display = 'none';
-        document.getElementById('section-' + section).style.display = 'block';
-        if (section === 'hopitaux') chargerHopitaux();
-        if (section === 'pharmacies') chargerPharmacies();
-        if (section === 'patients') chargerPatients();
-        if (section === 'consultations') chargerConsultations();
+
+        const sections = ['medecins', 'hopitaux', 'pharmacies', 'patients', 'consultations'];
+
+        sections.forEach(s => {
+            const el = document.getElementById('section-' + s);
+            if (el) el.style.display = 'none';
+        });
+
+        const sectionDemandee = document.getElementById('section-' + section);
+        if (sectionDemandee) sectionDemandee.style.display = 'block';
+
+        switch (section) {
+            case 'hopitaux':
+                chargerHopitaux();
+                break;
+            case 'pharmacies':
+                chargerPharmacies();
+                break;
+            case 'patients':
+                chargerPatients();
+                break;
+            case 'consultations':
+                chargerConsultations();
+                break;
+        }
     }
+
 
     // Charger tous les médecins
     function chargerMedecins() {
