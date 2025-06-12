@@ -1,64 +1,450 @@
-/* Style de base */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
+/* Variables */
+:root {
+    --primary: #2c7be5;
+    --primary-light: #e6f0fd;
+    --secondary: #00d97e;
+    --danger: #e63757;
+    --warning: #f6c343;
+    --dark: #283e59;
+    --light: #f9fafd;
+    --border: #e3ebf6;
+    --text-light: #95aac9;
+    --sidebar-width: 280px;
 }
 
-.container {
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: var(--dark);
+}
+
+/* Structure principale */
+.dashboard-container {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background: #2c3e50;
-    color: white;
-    padding: 20px;
-}
-
-.sidebar h2 {
-    margin-top: 0;
-}
-
-.sidebar nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar nav a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 8px 0;
-}
-
-/* Contenu principal */
 .main-content {
-    flex: 1;
-    padding: 20px;
+    margin-left: var(--sidebar-width);
+    flex-grow: 1;
+    padding: 1.5rem 2rem;
 }
 
-/* Rendez-vous */
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.agenda-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-nav {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background-color: white;
+    cursor: pointer;
+    color: var(--primary);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-nav:hover {
+    background-color: var(--primary-light);
+}
+
+#current-date {
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-width: 220px;
+    text-align: center;
+}
+
+.btn-primary {
+    padding: 0.5rem 1.25rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #1c65c7;
+}
+
+/* Contenu principal de l'agenda */
+.agenda-content {
+    display: flex;
+    height: calc(100vh - 120px);
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.time-column {
+    width: 5rem;
+    background-color: var(--light);
+    border-right: 1px solid var(--border);
+    padding-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+.time-slot {
+    height: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-right: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    position: relative;
+}
+
+.time-slot::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px dashed var(--border);
+}
+
+.agenda-grid {
+    flex-grow: 1;
+    position: relative;
+    padding: 0.5rem 1rem;
+    overflow-y: auto;
+}
+
 .rdv-item {
-    background: white;
-    border-left: 4px solid #3498db;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: absolute;
+    left: 0;
+    right: 1rem;
+    background-color: white;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+    transition: all 0.2s;
+}
+
+.rdv-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.rdv-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.patient-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.75rem;
 }
 
 .rdv-patient {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 1.1em;
+    flex-grow: 1;
 }
 
-.rdv-heure {
-    color: #3498db;
-    font-weight: bold;
-    margin-bottom: 5px;
+.rdv-patient strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.rdv-patient span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.rdv-time {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    background-color: var(--primary-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+}
+
+.rdv-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--light);
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Sidebar des détails */
+.agenda-sidebar {
+    width: 300px;
+    border-left: 1px solid var(--border);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.rdv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.no-rdv {
+    text-align: center;
+    color: var(--text-light);
+    padding: 2rem 0;
+    font-size: 0.9rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.2s;
+}
+
+.btn-close:hover {
+    color: var(--danger);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    font-size: 0.9rem;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(44, 123, 229, 0.25);
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.btn-cancel {
+    padding: 0.5rem 1.25rem;
+    background-color: var(--light);
+    color: var(--text-light);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #e3ebf6;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .agenda-sidebar {
+        width: 250px;
+    }
+}
+
+@media (max-width: 992px) {
+    .agenda-content {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .agenda-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+    
+    .time-column {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 5rem;
+        padding: 1rem;
+    }
+    
+    .agenda-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .view-switcher {
+        width: 100%;
+    }
+    
+    .btn-view {
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .date-navigation {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    #add-rdv {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        margin: 0 1rem;
+    }
 }

@@ -89,10 +89,10 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <li><a href="agenda.php"><i class="fas fa-calendar-check"></i> Agenda</a></li>
                     <li><a href="patients.php"><i class="fas fa-users"></i> Patients</a></li>
                     <li><a href="consultations.php"><i class="fas fa-notes-medical"></i> Consultations</a></li>
-                    <li><a href="ordonnances.php"><i class="fas fa-prescription"></i> Ordonnances</a></li>
+                    <li><a href="ordonnance.php"><i class="fas fa-prescription"></i> Ordonnances</a></li>
                     <li><a href="groupes.php"><i class="fas fa-object-group"></i> Groupes</a></li>
                     <li><a href="messagerie.php"><i class="fas fa-comments"></i> Messagerie <span class="badge"><?= $stats['messages_non_lus'] ?></span></a></li>
-                    <li><a href="statistiques.php"><i class="fas fa-chart-bar"></i> Statistiques</a></li>
+                    <li><a href="stats.php"><i class="fas fa-chart-bar"></i> Statistiques</a></li>
                     <li><a href="parametres.php"><i class="fas fa-cog"></i> Paramètres</a></li>
                 </ul>
             </nav>
