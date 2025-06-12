@@ -14,7 +14,7 @@
             color: white;
             padding: 15px;
             text-align: center;
-            font-size: 54px;
+            font-size: 64px;
         }
 
         .container {
@@ -24,8 +24,9 @@
         .sidebar {
             width: 143px;
             background-color:rgb(255, 217, 217);
-            padding: 20px;
+            padding: 50px;
             height: 130vh;
+            z-index: 6;
         }
 
         .sidebar a {
@@ -168,7 +169,7 @@
             justify-content: center;
         }
         .active:focus{
-            background-color: red;
+            background-color: white;
             text-align: center;
             border-radius: 2rem;
             padding: 0.3rem;
@@ -187,7 +188,7 @@
 
 <header>
     <div class="head">
-        + Allo Doc
+        <span style="color: rgb(0, 212, 71)">+</span> Allo Doc
     </div>
     <div class="search-bar">
         <input type="text" id="input-recherche" placeholder="Recherche..." oninput="filtrerTous()" class="search">
@@ -196,11 +197,11 @@
 
 <div class="container">
     <nav class="sidebar">
-        <a href="#" onclick="afficherSection('medecins')" class="active">Médecins</a>
-        <a href="#" onclick="afficherSection('patients')" class="active">Patients</a>
-        <a href="#" onclick="afficherSection('consultations')" class="active">Consultations</a>
-        <a href="#" onclick="afficherSection('hopitaux')" class="active">Hôpitaux</a>
-        <a href="#" onclick="afficherSection('pharmacies')" class="active">Pharmacies</a>
+        <a href="#" onclick="afficherSection('medecins')" class="active"><img src="medecin.png" alt="">  Médecins</a>
+        <a href="#" onclick="afficherSection('patients')" class="active"><img src="patient.png" alt="">  Patients</a>
+        <a href="#" onclick="afficherSection('consultations')" class="active"><img src="consult.png" alt="">  Consultations</a>
+        <a href="#" onclick="afficherSection('hopitaux')" class="active"><img src="hospital.png" alt="">  Hôpitaux</a>
+        <a href="#" onclick="afficherSection('pharmacies')" class="active"><img src="pharm.png" alt="">  Pharmacies</a>
         <a href="#">Déconnexion</a>
     </nav>
 
