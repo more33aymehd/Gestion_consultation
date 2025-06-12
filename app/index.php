@@ -14,7 +14,7 @@
 
 		</div>
 		<div class="right">
-			<span>Dashboard</span>
+			<div class="call">Dashboard</div>
 			<div class="image">
 				<img src="../photo/00ba0a60b6b29b73f4945f2bc6602f9f.jpg" alt="" style="width: 40px;">
 			</divcl>

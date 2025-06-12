@@ -15,11 +15,25 @@ try {
 
 $stmt = $pdo->query("SELECT DISTINCT specialite FROM medecins WHERE specialite != '' ORDER BY specialite ASC");
 $specialites = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$stmt = $pdo->query("SELECT * FROM groupes_whatsapp ORDER BY date_creation DESC");
+$groupes = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'fr',
+    includedLanguages: 'en,fr,es,de,pt,ar', // Langues autorisées
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <meta charset="UTF-8" />
     <title>Recherche Médecins AJAX</title>
     <style>
@@ -35,6 +49,12 @@ $specialites = $stmt->fetchAll(PDO::FETCH_COLUMN);
 <body>
 
 <h2>🔍 Rechercher un Médecin par Spécialité</h2>
+<h3>💬 Décrivez votre problème :</h3>
+<textarea id="description_probleme" rows="4" cols="50" placeholder="Ex : J’ai des douleurs à la poitrine quand je respire profondément."></textarea><br>
+<button type="button" onclick="startDictation()">🎤 Parler</button>
+<button onclick="detecterSpecialite()">🔍 Trouver la spécialité automatiquement</button>
+<p id="result_specialite" style="margin-top:10px; font-weight: bold;"></p>
+<div id="google_translate_element"></div>
 
 <label for="specialite">Spécialité :</label>
 <select id="specialite" name="specialite" required>
@@ -45,6 +65,9 @@ $specialites = $stmt->fetchAll(PDO::FETCH_COLUMN);
 </select>
 
 <div id="resultats"></div>
+<a href="groupes.php">Rejoins des Groupes</a>
+
+
 
 <script>
 document.getElementById('specialite').addEventListener('change', function(){
@@ -108,7 +131,8 @@ function attachEvents(){
                           const telBtn = container.previousElementSibling;
                           const phone = telBtn.getAttribute('data-tel').replace(/[^0-9]/g, '');
                           const contenu = encodeURIComponent(formData.get('contenu'));
-                          window.location.href = `https://wa.me/${phone}?text=${contenu}`;
+                         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(contenu)}`, '_blank');
+
                       }, 1500);
                   } else {
                       messageDiv.style.color = 'red';
@@ -121,7 +145,70 @@ function attachEvents(){
         };
     });
 }
+function detecterSpecialite() {
+    const description = document.getElementById('description_probleme').value.trim();
+    const resultat = document.getElementById('result_specialite');
+
+    if (!description) {
+        resultat.textContent = "Veuillez décrire votre problème.";
+        resultat.style.color = "red";
+        return;
+    }
+
+    resultat.textContent = "🔄 Analyse en cours...";
+    resultat.style.color = "black";
+
+    fetch('detecter_specialite.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'description=' + encodeURIComponent(description)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.specialite) {
+            resultat.textContent = "✅ Spécialité détectée : " + data.specialite;
+            resultat.style.color = "green";
+            document.getElementById('specialite').value = data.specialite;
+            // Déclencher l'événement pour charger les médecins
+            document.getElementById('specialite').dispatchEvent(new Event('change'));
+        } else {
+            resultat.textContent = "❌ Spécialité non reconnue. Essayez d’être plus précis.";
+            resultat.style.color = "red";
+        }
+    })
+    .catch(() => {
+        resultat.textContent = "Erreur réseau.";
+        resultat.style.color = "red";
+    });
+}
+
 </script>
+<script>
+function startDictation() {
+  if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "fr-FR"; // Langue française
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = function(event) {
+      const texte = event.results[0][0].transcript;
+      document.getElementById('description_probleme').value = texte;
+      recognition.stop();
+    };
+
+    recognition.onerror = function(event) {
+      alert("Erreur de reconnaissance vocale : " + event.error);
+      recognition.stop();
+    };
+
+    recognition.start();
+  } else {
+    alert("Votre navigateur ne supporte pas la reconnaissance vocale.");
+  }
+}
+</script>
+
 <div style=" margin-bottom: 20px;">
     Bonjour, <?= htmlspecialchars($nom_patient) ?> |
     <form method="post" action="deconnexion.php" style="display:inline;">
