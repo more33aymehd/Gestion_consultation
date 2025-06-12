@@ -243,7 +243,45 @@
             margin: 5px 0 0;
             font-size: 16px;
         }
+
+        .histogram {
+            display: flex;
+            gap: 10px;
+            height: 150px;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .bar {
+            width: 40px;
+            background-color: #0c4b91;
+            text-align: center;
+            position: relative;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .bar span {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            font-size: 12px;
+            color: #0c4b91;
+            font-weight: bold;
+        }
+
+        .labels {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .label {
+            width: 40px;
+            text-align: center;
+            font-size: 13px;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -290,6 +328,12 @@
                     <p>Consultations</p>
                 </div>
             </div>
+
+            <div style="margin-top: 40px;">
+                <h3>Évolution des consultations</h3>
+                <div id="histogramme-container"></div>
+            </div>
+
         </div>
 
         <div id="section-medecins">
@@ -885,15 +929,23 @@
         }
 
         function chargerDashboard() {
-            fetch("statistiques.php")
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById("nb-medecins").textContent = data.medecins;
-                    document.getElementById("nb-patients").textContent = data.patients;
-                    document.getElementById("nb-hopitaux").textContent = data.hopitaux;
-                    document.getElementById("nb-consultations").textContent = data.consultations;
-                });
-        }
+    // Charger les statistiques numériques (médecins, patients, hôpitaux, consultations)
+    fetch("statistiques.php")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("nb-medecins").textContent = data.medecins;
+            document.getElementById("nb-patients").textContent = data.patients;
+            document.getElementById("nb-hopitaux").textContent = data.hopitaux;
+            document.getElementById("nb-consultations").textContent = data.consultations;
+        });
+
+    // Charger l’histogramme d’évolution des consultations (HTML pur)
+    fetch("consultations_par_mois.php")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("histogramme-container").innerHTML = html;
+        });
+}
 
 </script>
 
