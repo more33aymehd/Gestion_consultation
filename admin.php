@@ -3,10 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Administration - Gestion Santé</title>
+    <!--"Roboto Mono"-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <!--Akronim-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Akronim&display=swap" rel="stylesheet">
+    <!--Inconsolata-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <!--Inria Sans-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <!--Montserrat-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!--Open Sans-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: "Montserrat";
         }
 
         header {
@@ -22,9 +46,9 @@
         }
 
         .sidebar {
-            width: 143px;
+            width: 183px;
             background-color:rgb(255, 217, 217);
-            padding: 50px;
+            padding: 30px;
             height: 130vh;
             z-index: 6;
         }
@@ -42,9 +66,10 @@
             padding: 20px;
         }
 
-        h2 {
+        h1 {
             color:rgb(0, 0, 0);
             text-align: center;
+            font-family: "Akronim";
         }
 
         .btn {
@@ -176,11 +201,47 @@
         }
         .head{
             display: inline-block;
+            font-family: "Arial";
         }
         .search{
             padding: 0.4rem;
             border-radius: 1rem;
             border: 1px solid white;
+        }
+
+        .dashboard-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            width: 180px;
+            height: 100px;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-box.red { background-color: #d62828; }
+        .stat-box.orange { background-color: #f77f00; }
+        .stat-box.yellow { background-color: #fcbf49; color: black; }
+        .stat-box.blue { background-color: #003049; }
+
+        .stat-box h3 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .stat-box p {
+            margin: 5px 0 0;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -197,6 +258,7 @@
 
 <div class="container">
     <nav class="sidebar">
+        <a href="#" onclick="afficherSection('dashboard')" class="active"><img src="dashboard.png" alt="">  Tableau de bord</a>
         <a href="#" onclick="afficherSection('medecins')" class="active"><img src="medecin.png" alt="">  Médecins</a>
         <a href="#" onclick="afficherSection('patients')" class="active"><img src="patient.png" alt="">  Patients</a>
         <a href="#" onclick="afficherSection('consultations')" class="active"><img src="consult.png" alt="">  Consultations</a>
@@ -206,8 +268,32 @@
     </nav>
 
     <div class="content">
+
+        <!-- Section Tableau de bord -->
+        <div id="section-dashboard">
+            <h1>Tableau de bord</h1>
+            <div class="dashboard-stats">
+                <div class="stat-box red">
+                    <h3 id="nb-medecins">0</h3>
+                    <p>Médecins</p>
+                </div>
+                <div class="stat-box orange">
+                    <h3 id="nb-patients">0</h3>
+                    <p>Patients</p>
+                </div>
+                <div class="stat-box yellow">
+                    <h3 id="nb-hopitaux">0</h3>
+                    <p>Hôpitaux</p>
+                </div>
+                <div class="stat-box blue">
+                    <h3 id="nb-consultations">0</h3>
+                    <p>Consultations</p>
+                </div>
+            </div>
+        </div>
+
         <div id="section-medecins">
-            <h2>Médecins</h2>
+            <h1>Médecins</h1>
             <div class="h2">
                 <button class="btn" onclick="document.getElementById('form-medecin').style.display='block'">Ajouter un médecin</button>
             </div>
@@ -270,7 +356,7 @@
 
         <!-- Section Hôpitaux -->
         <div id="section-hopitaux" style="display: none;">
-            <h2>Hôpitaux</h2>
+            <h1>Hôpitaux</h1>
 
             <div class="h2">
                 <button class="btn" onclick="document.getElementById('form-hopital').style.display='block'">Ajouter un hôpital</button>
@@ -319,7 +405,7 @@
 
         
         <div id="section-pharmacies" style="display: none;">
-            <h2>Pharmacies</h2>
+            <h1>Pharmacies</h1>
 
             <div class="h2">
                 <button class="btn" onclick="document.getElementById('form-pharmacie').style.display='block'">Ajouter une pharmacie</button>
@@ -368,13 +454,13 @@
 
         <!-- Section Patients -->
         <div id="section-patients" style="display: none;">
-            <h2>Patients</h2>
+            <h1>Patients</h1>
             <div id="liste-patients" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;"></div>
         </div>
 
         <!-- Section Consultations -->
         <div id="section-consultations" style="display: none;">
-            <h2>Consultations</h2>
+            <h1>Consultations</h1>
             <div id="liste-consultations" style="margin-top: 20px;"></div>
         </div>
 
@@ -390,7 +476,7 @@
 <script>
     function afficherSection(section) {
 
-        const sections = ['medecins', 'hopitaux', 'pharmacies', 'patients', 'consultations'];
+        const sections = ['medecins', 'hopitaux', 'pharmacies', 'patients', 'consultations', 'dashboard'];
 
         sections.forEach(s => {
             const el = document.getElementById('section-' + s);
@@ -412,6 +498,9 @@
                 break;
             case 'consultations':
                 chargerConsultations();
+                break;
+            case 'dashboard':
+                chargerDashboard();
                 break;
         }
     }
@@ -793,6 +882,17 @@
             document.querySelectorAll("#liste-consultations .consultation-box").forEach(box => {
                 box.style.display = box.textContent.toLowerCase().includes(val) ? "" : "none";
             });
+        }
+
+        function chargerDashboard() {
+            fetch("statistiques.php")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("nb-medecins").textContent = data.medecins;
+                    document.getElementById("nb-patients").textContent = data.patients;
+                    document.getElementById("nb-hopitaux").textContent = data.hopitaux;
+                    document.getElementById("nb-consultations").textContent = data.consultations;
+                });
         }
 
 </script>
