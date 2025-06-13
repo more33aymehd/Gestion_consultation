@@ -132,7 +132,7 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php foreach ($consultations as $consult): ?>
                                 <tr onclick="window.location='consultation_detail.php?id=<?= $consult['id_consultation'] ?>'">
                                     <td>
-                                        <img src="<?= $consult['photo'] ? 'uploads/' . $consult['photo'] : 'assets/default-patient.png' ?>" class="patient-avatar-sm" />
+                                        <img src="<?= $consult['photo'] ? 'images/' . $consult['photo'] : 'assets/default-patient.png' ?>" class="patient-avatar-sm" />
                                         <?= htmlspecialchars($consult['nom']) ?>
                                     </td>
                                     <td><?= date('d/m/Y H:i', strtotime($consult['date'])) ?></td>

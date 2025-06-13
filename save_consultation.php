@@ -28,20 +28,36 @@ try {
         $_POST['prix'] ?? null
     ]);
     $consultation_id = $pdo->lastInsertId();
+    
 
-    // Enregistrer les médicaments prescrits (dans la table commandes)
-    if (!empty($_POST['medicaments'])) {
-        foreach ($_POST['medicaments'] as $medicament) {
-            $stmt = $pdo->prepare("
-                INSERT INTO commandes (id_patient, id_medicament, date_commande)
-                VALUES (?, ?, NOW())
-            ");
-            $stmt->execute([
-                $_POST['id_patient'],
-                $medicament['id_medicament']
-            ]);
-        }
-    }
+    // Enregistrement dans la table ordonnances
+$stmt = $pdo->prepare("
+    INSERT INTO ordonnances (id_medecin, id_patient, date_ord, notes, statut)
+    VALUES (?, ?, ?, ?, 'active')
+");
+$stmt->execute([
+    $_POST['id_medecin'],
+    $_POST['id_patient'],
+    $_POST['date'],
+    $_POST['contenu']
+]);
+$id_ordonnance = $pdo->lastInsertId();
+
+// Insertion des médicaments dans ordonnance_medicaments
+foreach ($_POST['medicaments'] as $medicament) {
+    $stmt = $pdo->prepare("
+        INSERT INTO ordonnance_medicaments (id_ordonnance, id_medicament, posologie, duree, quantite)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+    $stmt->execute([
+        $id_ordonnance,
+        $medicament['id_medicament'],
+        $medicament['posologie'],
+        $medicament['duree'],
+        $medicament['duree'] * 1 // quantite approximative (ou calculé selon la posologie si besoin)
+    ]);
+}
+
 
     // Envoyer l'email si demandé
     $email_sent = false;

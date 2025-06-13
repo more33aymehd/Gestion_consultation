@@ -256,7 +256,7 @@ $medicaments = $stmt_medicaments->fetchAll(PDO::FETCH_ASSOC);
                             if (data.success) {
                                 alert("Ordonnance envoyée avec succès !");
                             } else {
-                                alert("Erreur lors de l'envoi : " + data.message);
+                                alert("Erreur lors de l'envoi mon type : " + data.message);
                             }
                         })
                         .catch(error => {
@@ -268,29 +268,29 @@ $medicaments = $stmt_medicaments->fetchAll(PDO::FETCH_ASSOC);
         });
 
         // Soumission du formulaire
-        document.getElementById('ordonnance-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            
-            fetch('save_consultation.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Ordonnance enregistrée' + (data.email_sent ? ' et envoyée par email' : ''));
-                    closeModal();
-                    window.location.reload();
-                } else {
-                    alert('Erreur: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Une erreur est survenue');
-            });
-        });
+document.getElementById('ordonnance-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('save_consultation.php', { // Changer ici
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Ordonnance enregistrée' + (data.email_sent ? ' et envoyée par email' : ''));
+            closeModal();
+            window.location.reload();
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Une erreur est survenue');
+    });
+});
     </script>
 </body>
 </html>
