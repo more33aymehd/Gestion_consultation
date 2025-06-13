@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e9f1fa;
+    color: #1a3559;
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(135deg, #003087, #4da8ff);
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+header img.logo {
+    max-width: 180px;
+    margin: 0 auto 1.5rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+header img.logo:hover {
+    transform: scale(1.1);
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.slider {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slider-item {
+    display: none;
+    width: 100%;
+    height: 450px;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.slider-item.active {
+    display: flex;
+    opacity: 1;
+}
+
+.slider-item h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.slider-item p {
+    font-size: 1.3rem;
+    max-width: 700px;
+}
+
+nav {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+nav ul li a {
+    color: #003087;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+nav ul li a:hover {
+    background-color: #003087;
+    color: white;
+    transform: translateY(-2px);
+}
+
+nav select {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+section {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+h2 {
+    color: #003087;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    background-color: #f9fafb;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    font-size: 1.4rem;
+    color: #003087;
+    margin-bottom: 0.75rem;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #4a5568;
+}
+
+form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+}
+
+label {
+    display: block;
+    margin: 0.75rem 0;
+    font-weight: 500;
+    color: #1a3559;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #003087;
+    outline: none;
+}
+
+button {
+    background-color: #4da8ff;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #003087;
+    transform: translateY(-3px);
+}
+
+a.button {
+    display: inline-block;
+    background-color: #4da8ff;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+a.button:hover {
+    background-color: #003087;
+    transform: translateY(-3px);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+th, td {
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+th {
+    background-color: #f1f5f9;
+    color: #003087;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+    .slider-item h2 {
+        font-size: 1.8rem;
+    }
+    .slider-item p {
+        font-size: 1.1rem;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    section {
+        padding: 1.5rem;
+    }
+}
+
+/* Styles pour la facture */
+.invoice {
+    border: 2px solid #333;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+.invoice-header {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+.invoice-details {
+    margin-bottom: 20px;
+}
+.invoice table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.invoice th, .invoice td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+.invoice th {
+    background-color: #e0e0e0;
+}
+.total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* Styles pour le chat */
+.chat-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #fff;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+.message.patient {
+    background-color: #e0f7fa;
+    margin-left: 20%;
+}
+.message.dr-nancy {
+    background-color: #f0f4c3;
+    margin-right: 20%;
+}
+.message p {
+    margin: 0;
+}
+.message small {
+    color: #666;
+}
+
+/* Styles pour la carte */
+#map {
+    height: 400px;
+}
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.doctor-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.doctor-card img {
+    margin-bottom: 10px;
+}
+.doctor-card h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+.doctor-card p {
+    color: #666;
+    margin: 5px 0;
+}
+.doctor-card a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+}
+.doctor-card a:hover {
+    text-decoration: underline;
+}
+.doctor-profile {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.doctor-profile img {
+    margin-bottom: 15px;
+}
+.doctor-profile h2 {
+    margin: 10px 0;
+}
+.doctor-profile p {
+    margin: 10px 0;
+    text-align: left;
+}
+.doctor-profile a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.doctor-profile a:hover {
+    background-color: #555;
+}

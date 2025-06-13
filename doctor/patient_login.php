@@ -7,20 +7,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     try {
-        $stmt = $conn->prepare("SELECT * FROM patients WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id_patient, first_name, last_name, password FROM patients WHERE email = ?");
         $stmt->execute([$email]);
-        $patient = $stmt->fetch();
+        $patient = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($patient && password_verify($password, $patient['password'])) {
-            $_SESSION['patient_id'] = $patient['id'];
+            $_SESSION['patient_id'] = $patient['id_patient'];
             $_SESSION['patient_name'] = $patient['first_name'] . ' ' . $patient['last_name'];
             header("Location: patient_dashboard.php");
             exit;
         } else {
-            echo "<p>Email ou mot de passe incorrect.</p>";
+            $error = "Email ou mot de passe incorrect.";
         }
     } catch (PDOException $e) {
-        echo "<p>Erreur : " . $e->getMessage() . "</p>";
+        $error = "Erreur : " . htmlspecialchars($e->getMessage());
     }
 }
 ?>
@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Patient</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -37,14 +38,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>Connexion Patient</h1>
     </header>
     <main>
-        <form method="POST" action="patient_login.php">
-            <label>Email :</label>
-            <input type="email" name="email" required><br>
-            <label>Mot de passe :</label>
-            <input type="password" name="password" required><br>
-            <button type="submit">Se connecter</button>
-        </form>
-        <p>Pas de compte ? <a href="register.php">S'inscrire</a></p>
+        <section>
+            <?php if (isset($error)): ?>
+                <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+            <?php endif; ?>
+            <form method="POST" action="patient_login.php">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+                <label for="mot_de_passe">Mot de passe :</label>
+                <input type="password" id="mot_de_passe" name="password" required>
+                <button type="submit">Se connecter</button>
+            </form>
+            <p>Pas de compte ? <a href="register.php">S'inscrire</a></p>
+        </section>
     </main>
 </body>
 </html>

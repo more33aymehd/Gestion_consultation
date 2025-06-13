@@ -2,30 +2,60 @@
 session_start();
 require_once 'config.php';
 
-if (!isset($_SESSION['doctor_id'])) {
+if (!isset($_SESSION['medecin_id'])) {
     header("Location: doctor_login.php");
     exit;
 }
 
-$message = '';
+// Récupérer tous les hôpitaux disponibles
+try {
+    $stmt = $conn->prepare("SELECT id_hopital, nom FROM hopitaux ORDER BY nom");
+    $stmt->execute();
+    $hopitaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $error = "Erreur hôpitaux : " . htmlspecialchars($e->getMessage());
+}
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $start_time = $_POST['start_time'];
-    $end_time = $_POST['end_time'];
+// Récupérer les horaires du médecin
+try {
+    $stmt = $conn->prepare("SELECT h.id_horaire, h.jour, h.heure_debut, h.heure_fin, hop.nom AS hopital 
+                            FROM horaires h 
+                            JOIN hopitaux hop ON h.id_hopital = hop.id_hopital 
+                            WHERE h.id_medecin = ? ORDER BY h.jour, h.heure_debut");
+    $stmt->execute([$_SESSION['medecin_id']]);
+    $horaires = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $error = "Erreur horaires : " . htmlspecialchars($e->getMessage());
+}
+
+// Ajouter un horaire
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
+    $jour = $_POST['jour'];
+    $heure_debut = $_POST['heure_debut'];
+    $heure_fin = $_POST['heure_fin'];
+    $id_hopital = $_POST['id_hopital'];
 
     try {
-        $stmt = $conn->prepare("INSERT INTO schedules (doctor_id, start_time, end_time) VALUES (?, ?, ?)");
-        $stmt->execute([$_SESSION['doctor_id'], $start_time, $end_time]);
-        $message = "<p style='color: green; text-align: center;'>Créneau ajouté avec succès !</p>";
+        $stmt = $conn->prepare("INSERT INTO horaires (id_medecin, id_hopital, jour, heure_debut, heure_fin) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$_SESSION['medecin_id'], $id_hopital, $jour, $heure_debut, $heure_fin]);
+        header("Location: manage_schedule.php");
+        exit;
     } catch (PDOException $e) {
-        $message = "<p style='color: red; text-align: center;'>Erreur : " . $e->getMessage() . "</p>";
+        $error = "Erreur ajout : " . htmlspecialchars($e->getMessage());
     }
 }
 
-// Récupérer les créneaux existants
-$stmt = $conn->prepare("SELECT * FROM schedules WHERE doctor_id = ?");
-$stmt->execute([$_SESSION['doctor_id']]);
-$schedules = $stmt->fetchAll();
+// Supprimer un horaire
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['id_horaire'])) {
+    try {
+        $stmt = $conn->prepare("DELETE FROM horaires WHERE id_horaire = ? AND id_medecin = ?");
+        $stmt->execute([$_POST['id_horaire'], $_SESSION['medecin_id']]);
+        header("Location: manage_schedule.php");
+        exit;
+    } catch (PDOException $e) {
+        $error = "Erreur suppression : " . htmlspecialchars($e->getMessage());
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,47 +72,65 @@ $schedules = $stmt->fetchAll();
     </header>
     <nav>
         <ul>
-            <li><a href="doctor_dashboard.php">Dashboard</a></li>
-            <li><a href="prescription.php">Envoyer une ordonnance</a></li>
+            <li><a href="doctor_dashboard.php">Tableau de bord</a></li>
+            <li><a href="accept_reject_appointment.php">Gérer les rendez-vous</a></li>
+            <li><a href="edit_doctor_profile.php">Modifier le profil</a></li>
             <li><a href="logout.php">Déconnexion</a></li>
         </ul>
     </nav>
     <main>
         <section>
-            <h2>Ajouter un créneau horaire</h2>
-            <p>Ajoutez une plage horaire où vous êtes disponible pour des consultations.</p>
-            <?php echo $message; ?>
-            <form method="POST" action="manage_schedule.php">
-                <label for="start_time">Début :</label>
-                <input type="datetime-local" id="start_time" name="start_time" required>
-                <label for="end_time">Fin :</label>
-                <input type="datetime-local" id="end_time" name="end_time" required>
-                <button type="submit">Ajouter</button>
-            </form>
-            <h2>Vos créneaux horaires</h2>
-            <?php if (empty($schedules)): ?>
-                <p>Aucun créneau ajouté.</p>
+            <h2>Vos horaires</h2>
+            <?php if (isset($error)): ?>
+                <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+            <?php elseif (empty($horaires)): ?>
+                <p>Aucun horaire défini.</p>
             <?php else: ?>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background-color: #f1f5f9;">
-                            <th style="padding: 0.75rem; border: 1px solid #e2e8f0;">Début</th>
-                            <th style="padding: 0.75rem; border: 1px solid #e2e8f0;">Fin</th>
+                <table>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Heure début</th>
+                        <th>Heure fin</th>
+                        <th>Hôpital</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php foreach ($horaires as $horaire): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($horaire['jour']); ?></td>
+                            <td><?php echo htmlspecialchars($horaire['heure_debut']); ?></td>
+                            <td><?php echo htmlspecialchars($horaire['heure_fin']); ?></td>
+                            <td><?php echo htmlspecialchars($horaire['hopital']); ?></td>
+                            <td>
+                                <form method="POST" action="manage_schedule.php" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id_horaire" value="<?php echo $horaire['id_horaire']; ?>">
+                                    <button type="submit" onclick="return confirm('Supprimer cet horaire ?')">Supprimer</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($schedules as $schedule): ?>
-                            <tr>
-                                <td style="padding: 0.75rem; border: 1px solid #e2e8f0;">
-                                    <?php echo htmlspecialchars($schedule['start_time']); ?>
-                                </td>
-                                <td style="padding: 0.75rem; border: 1px solid #e2e8f0;">
-                                    <?php echo htmlspecialchars($schedule['end_time']); ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                    <?php endforeach; ?>
                 </table>
+            <?php endif; ?>
+            <h3>Ajouter un horaire</h3>
+            <?php if (empty($hopitaux)): ?>
+                <p>Aucun hôpital disponible. <a href="mailto:admin@hospitalapp.com">Contacter l’administrateur</a> pour ajouter des hôpitaux.</p>
+            <?php else: ?>
+                <form method="POST" action="manage_schedule.php">
+                    <input type="hidden" name="action" value="add">
+                    <label for="jour">Jour :</label>
+                    <input type="date" id="jour" name="jour" required>
+                    <label for="heure_debut">Heure début :</label>
+                    <input type="time" id="heure_debut" name="heure_debut" required>
+                    <label for="heure_fin">Heure fin :</label>
+                    <input type="time" id="heure_fin" name="heure_fin" required>
+                    <label for="id_hopital">Hôpital :</label>
+                    <select id="id_hopital" name="id_hopital" required>
+                        <?php foreach ($hopitaux as $hopital): ?>
+                            <option value="<?php echo $hopital['id_hopital']; ?>"><?php echo htmlspecialchars($hopital['nom']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button type="submit">Ajouter</button>
+                </form>
             <?php endif; ?>
         </section>
     </main>

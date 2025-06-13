@@ -1,14 +1,9 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "hospital_db";
-
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=localhost;dbname=gestion_sante", "root", "");
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    $conn->exec("SET NAMES 'utf8'");
+} catch (PDOException $e) {
+    die("Connexion échouée : " . htmlspecialchars($e->getMessage()));
 }
 ?>
-
