@@ -1,8 +1,19 @@
 <?php
 require_once 'config.php';
 
-// ID médecin fixé manuellement (à adapter)
-$id_medecin = 2;
+// Vérifier si la session est déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Vérifier la connexion
+if (!isset($_SESSION['medecin'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Récupérer l'ID du médecin depuis la session
+$id_medecin = $_SESSION['id'];
 
 // Récupération des données du médecin
 $stmt = $pdo->prepare("SELECT * FROM medecins WHERE id_medecin = ?");
@@ -10,7 +21,7 @@ $stmt->execute([$id_medecin]);
 $medecin = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$medecin) {
-    die("Médecin introuvable, vérifie l'ID.");
+    die("Médecin introuvable.");
 }
 
 $today = date('Y-m-d');
@@ -29,12 +40,7 @@ $stmt = $pdo->prepare("SELECT COUNT(DISTINCT id_patient) FROM consultations WHER
 $stmt->execute([$id_medecin]);
 $stats['patients_actifs'] = $stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM messages WHERE id_medecin = ? AND expediteur = 'patient'");
-$stmt->execute([$id_medecin]);
-$stats['messages_non_lus'] = $stmt->fetchColumn();
 
-// Récupérer rendez-vous du jour - attention ta base ne semble pas avoir cette table (à adapter)
-$rdvs = []; // vide car pas de table rendez_vous dans tes tables
 
 // Dernières consultations avec détails
 $stmt = $pdo->prepare("
@@ -54,16 +60,8 @@ $stmt->execute([$id_medecin]);
 $groupes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Messages récents
-$stmt = $pdo->prepare("
-    SELECT m.*, p.nom as patient_nom 
-    FROM messages m
-    LEFT JOIN patients p ON m.id_patient = p.id_patient
-    WHERE m.id_medecin = ?
-    ORDER BY m.date_envoi DESC 
-    LIMIT 3
-");
-$stmt->execute([$id_medecin]);
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -88,10 +86,10 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <li class="active"><a href="docteur.php"><i class="fas fa-home"></i> Tableau de bord</a></li>
                     <li><a href="agenda.php"><i class="fas fa-calendar-check"></i> Agenda</a></li>
                     <li><a href="patients.php"><i class="fas fa-users"></i> Patients</a></li>
-                    <li><a href="consultations.php"><i class="fas fa-notes-medical"></i> Consultations</a></li>
+                    
                     <li><a href="ordonnance.php"><i class="fas fa-prescription"></i> Ordonnances</a></li>
                     <li><a href="groupes.php"><i class="fas fa-object-group"></i> Groupes</a></li>
-                    <li><a href="messagerie.php"><i class="fas fa-comments"></i> Messagerie <span class="badge"><?= $stats['messages_non_lus'] ?></span></a></li>
+
                     <li><a href="stats.php"><i class="fas fa-chart-bar"></i> Statistiques</a></li>
                     <li><a href="parametres.php"><i class="fas fa-cog"></i> Paramètres</a></li>
                 </ul>
@@ -110,8 +108,6 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button class="btn-help"><i class="fas fa-question-circle"></i></button>
                 </div>
             </header>
-
-            <!-- Widgets, consultations, messages etc... ici (copie la partie de ton code d'origine) -->
 
             <div class="bottom-section">
                 <div class="widget">

@@ -662,3 +662,63 @@ header h1 {
         font-size: 0.9rem;
     }
 }
+
+
+/* Responsive Table Patients */
+@media (max-width: 992px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .data-table {
+        font-size: 0.85rem;
+    }
+
+    .data-table th, .data-table td {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .data-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #e3ebf6;
+        border-radius: 0.5rem;
+    }
+
+    .data-table table {
+        width: 100%;
+        min-width: 800px;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .search-bar input,
+    .search-bar button {
+        width: 100%;
+        border-radius: 0.375rem;
+    }
+
+    .search-bar button {
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content h1 {
+        font-size: 1.25rem;
+    }
+
+    .patient-avatar-sm {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}

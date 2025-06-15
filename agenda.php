@@ -1,8 +1,19 @@
 <?php
 require_once 'config.php';
 
-// ID médecin fixé manuellement
-$id_medecin = isset($_GET['id_medecin']) ? (int)$_GET['id_medecin'] : 1;
+// Vérifier si la session est déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Vérifier la connexion
+if (!isset($_SESSION['medecin'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Récupérer l'ID du médecin depuis la session
+$id_medecin = $_SESSION['id'];
 
 // Récupération des données du médecin
 $stmt = $pdo->prepare("SELECT * FROM medecins WHERE id_medecin = ?");
@@ -129,40 +140,39 @@ if ($rdvs === false) {
         }
         
         function saveRdv() {
-    const data = {
-        id_medecin: document.getElementById('medecin-id').value,
-        id_patient: document.getElementById('rdv-patient').value,
-        date_rdv: document.getElementById('rdv-date').value,
-        heure_rdv: document.getElementById('rdv-heure').value,
-        motif: document.getElementById('rdv-motif').value
-    };
+            const data = {
+                id_medecin: document.getElementById('medecin-id').value,
+                id_patient: document.getElementById('rdv-patient').value,
+                date_rdv: document.getElementById('rdv-date').value,
+                heure_rdv: document.getElementById('rdv-heure').value,
+                motif: document.getElementById('rdv-motif').value
+            };
 
-    // Validation rapide
-    if (!data.id_patient || !data.date_rdv || !data.heure_rdv || !data.motif) {
-        alert("Veuillez remplir tous les champs.");
-        return;
-    }
+            // Validation rapide
+            if (!data.id_patient || !data.date_rdv || !data.heure_rdv || !data.motif) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
 
-    fetch('save_rdv.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert("Rendez-vous enregistré !");
-            window.location.reload(); // recharge pour voir le nouveau RDV
-        } else {
-            alert("Erreur : " + result.message);
+            fetch('save_rdv.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert("Rendez-vous enregistré !");
+                    window.location.reload(); // recharge pour voir le nouveau RDV
+                } else {
+                    alert("Erreur : " + result.message);
+                }
+            })
+            .catch(error => {
+                console.error("Erreur réseau :", error);
+                alert("Erreur lors de la requête.");
+            });
         }
-    })
-    .catch(error => {
-        console.error("Erreur réseau :", error);
-        alert("Erreur lors de la requête.");
-    });
-}
-
     </script>
 </body>
 </html>

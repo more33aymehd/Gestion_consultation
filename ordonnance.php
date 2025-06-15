@@ -1,18 +1,27 @@
 <?php
 require_once 'config.php';
 
-// ID médecin fixé manuellement (peut être changé via l'URL)
-$id_medecin = isset($_GET['id_medecin']) ? (int)$_GET['id_medecin'] : 1;
+// Vérifier si la session est déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Vérifier la connexion
+if (!isset($_SESSION['medecin'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Récupérer l'ID du médecin depuis la session
+$id_medecin = $_SESSION['id'];
 
 // Récupération des données du médecin
 $stmt = $pdo->prepare("SELECT * FROM medecins WHERE id_medecin = ?");
-if (!$stmt->execute([$id_medecin])) {
-    die("Erreur lors de la récupération des données du médecin.");
-}
-$medecin = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->execute([$id_medecin]);
+$medecin = $stmt->fetch();
 
 if (!$medecin) {
-    die("Médecin introuvable, vérifiez l'ID.");
+    die("Médecin introuvable");
 }
 
 // Récupération des consultations (utilisées comme ordonnances)
@@ -25,9 +34,7 @@ $stmt_consultations = $pdo->prepare("
     LIMIT 50
 ");
 
-if (!$stmt_consultations->execute([$id_medecin])) {
-    die("Erreur lors de la récupération des consultations.");
-}
+$stmt_consultations->execute([$id_medecin]);
 $consultations = $stmt_consultations->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupération des médicaments disponibles
@@ -42,7 +49,6 @@ if (!$stmt_medicaments) {
     die("Erreur lors de la récupération des médicaments.");
 }
 $medicaments = $stmt_medicaments->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -256,7 +262,7 @@ $medicaments = $stmt_medicaments->fetchAll(PDO::FETCH_ASSOC);
                             if (data.success) {
                                 alert("Ordonnance envoyée avec succès !");
                             } else {
-                                alert("Erreur lors de l'envoi mon type : " + data.message);
+                                alert("Erreur lors de l'envoi: " + data.message);
                             }
                         })
                         .catch(error => {
@@ -268,29 +274,29 @@ $medicaments = $stmt_medicaments->fetchAll(PDO::FETCH_ASSOC);
         });
 
         // Soumission du formulaire
-document.getElementById('ordonnance-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    
-    fetch('save_consultation.php', { // Changer ici
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Ordonnance enregistrée' + (data.email_sent ? ' et envoyée par email' : ''));
-            closeModal();
-            window.location.reload();
-        } else {
-            alert('Erreur: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Une erreur est survenue');
-    });
-});
+        document.getElementById('ordonnance-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('save_consultation.php', { // Changer ici
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Ordonnance enregistrée' + (data.email_sent ? ' et envoyée par email' : ''));
+                    closeModal();
+                    window.location.reload();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Une erreur est survenue');
+            });
+        });
     </script>
 </body>
 </html>

@@ -14,8 +14,8 @@
     <header class="header">
         <div class="logo">ON A PAS ENCORE EU DE NOM POUR LE SITE😐</div>
         <nav class="nav-links">
-            <a href="#" class="nav-link">Inscription</a>
-            <a href="#" class="nav-link">Connexion</a>
+            <a href="register.php" class="nav-link">Inscription</a>
+            <a href="login.php" class="nav-link">Connexion</a>
         </nav>
     </header>
 

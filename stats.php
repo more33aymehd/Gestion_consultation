@@ -1,8 +1,19 @@
 <?php
 require_once 'config.php';
 
-// ID médecin fixé manuellement (peut être changé via l'URL)
-$id_medecin = isset($_GET['id_medecin']) ? (int)$_GET['id_medecin'] : 1;
+// Vérifier si la session est déjà démarrée
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Vérifier la connexion
+if (!isset($_SESSION['medecin'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Récupérer l'ID du médecin depuis la session
+$id_medecin = $_SESSION['id'];
 
 // Récupération des données du médecin
 $stmt = $pdo->prepare("SELECT * FROM medecins WHERE id_medecin = ?");
@@ -66,7 +77,6 @@ if (!$consultations_par_mois->execute([$id_medecin])) {
     die("Erreur lors de la récupération des consultations par mois.");
 }
 $consultations_par_mois = $consultations_par_mois->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -134,20 +144,15 @@ $consultations_par_mois = $consultations_par_mois->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
-        // Changement de médecin
-        function changeMedecin(id) {
-            window.location.href = `statistiques.php?id_medecin=${id}`;
-        }
+        // Données pour les graphiques
+        const mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+        const consultationsData = <?= json_encode(array_map(function($m) { 
+            return ['mois' => $m['mois'], 'nombre' => $m['nombre']]; 
+        }, $consultations_par_mois)) ?>;
 
-      // Données pour les graphiques
-const mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-const consultationsData = <?= json_encode(array_map(function($m) { 
-    return ['mois' => $m['mois'], 'nombre' => $m['nombre']]; 
-}, $consultations_par_mois)) ?>;
-
-const revenusData = <?= json_encode(array_map(function($m) { 
-    return ['mois' => $m['mois'], 'montant' => $m['revenus']];
-}, $consultations_par_mois)) ?>;
+        const revenusData = <?= json_encode(array_map(function($m) { 
+            return ['mois' => $m['mois'], 'montant' => $m['revenus']];
+        }, $consultations_par_mois)) ?>;
 
         // Préparation des données pour Chart.js
         const consultationsParMois = Array(12).fill(0);

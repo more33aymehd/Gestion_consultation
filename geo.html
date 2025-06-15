@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Géolocalisation avec Google Maps</title>
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h3>Ma position actuelle sur Google Maps</h3>
+<div id="map"></div>
+
+<script>
+  let map;
+
+  function initMap() {
+    // Définir une position par défaut (si géolocalisation échoue)
+    const defaultLocation = { lat: 48.8566, lng: 2.3522 }; // Paris
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: defaultLocation,
+      zoom: 12,
+    });
+
+    // Tente de géolocaliser l'utilisateur
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: "Vous êtes ici !"
+          });
+
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, map.getCenter());
+        }
+      );
+    } else {
+      // Le navigateur ne supporte pas la géolocalisation
+      handleLocationError(false, map.getCenter());
+    }
+  }
+
+  function handleLocationError(browserHasGeolocation, pos) {
+    alert(browserHasGeolocation
+      ? "Erreur : la géolocalisation a échoué."
+      : "Erreur : votre navigateur ne supporte pas la géolocalisation.");
+  }
+</script>
+
+<!-- Remplacez VOTRE_CLE_API par votre vraie clé API -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCx6_tEAJWH1neOhEwR7seSg6cHPclKREg&callback=initMap">
+</script>
+
+</body>
+</html>
